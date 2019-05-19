@@ -54,4 +54,8 @@ public interface AdValidation extends Function<Anuncio, Boolean> {
 	static AdValidation flatIsComplete() {
 		return descriptionIsNotEmpty().and(houseSizeIsNotEmpty()).and(photoIsNotEmpty());
 	}
+	
+	static AdValidation garageIsComplete() {
+		return photoIsNotEmpty();
+	}
 }

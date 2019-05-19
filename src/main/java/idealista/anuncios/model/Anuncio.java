@@ -16,16 +16,12 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 @JsonInclude(Include.NON_NULL) 
 @JsonIgnoreProperties(ignoreUnknown=true)
 @Builder
-@Getter
-@Setter
 @Data
 @ToString
 @AllArgsConstructor

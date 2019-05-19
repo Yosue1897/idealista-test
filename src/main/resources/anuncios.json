@@ -12,7 +12,7 @@
    },
    {
       "id":2,
-      "description":"Nuevo Ático céntrico recién reformado. No deje pasar la oportunidad y adquiera este Ático de lujo",
+      "description":"Nuevo Atico centrico recien reformado. No deje pasar la oportunidad y adquiera este Atico de lujo",
       "typology":"FLAT",
       "houseSize":300,
       "pictures":[
@@ -35,7 +35,7 @@
    },
    {
       "id":4,
-      "description":"Ático céntrico muy luminoso y recién reformado, parece nuevo",
+      "description":"Atico centrico muy luminoso y recien reformado, parece nuevo",
       "typology":"FLAT",
       "houseSize":130,
       "pictures":[
@@ -77,7 +77,7 @@
    },
    {
       "id":8,
-      "description":"Maravilloso chalet situado en las afueras de un pequeño pueblo rural. El entorno es espectacular, las vistas magníficas. Cómprelo ahora!",
+      "description":"Maravilloso chalet situado en las afueras de un pequeño pueblo rural. El entorno es espectacular, las vistas magníficas. Comprelo ahora!",
       "typology":"CHALET",
       "houseSize":150,
       "gardenSize":20,

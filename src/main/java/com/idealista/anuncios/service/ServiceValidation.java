@@ -1,56 +1,37 @@
-package com.idealista.anuncios.utils;
+package com.idealista.anuncios.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.util.ResourceUtils;
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.idealista.anuncios.config.AnunciosProperties;
 import com.idealista.anuncios.validation.AdValidation;
 
 import idealista.anuncios.model.Anuncio;
 import idealista.anuncios.model.Foto;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public class ReaderFile {
+@Component
+@Configuration
+@EnableConfigurationProperties(AnunciosProperties.class)
+public class ServiceValidation {
 	
 	private static final String HD = "HD";
-	private AnunciosProperties anunciosProperties;
-		
-	ObjectMapper mapper = new ObjectMapper();
-	List<Foto> photosList = new ArrayList<>();
+	private static final String SD = "SD";
 	Integer wordScore = 0;
-
-	public List<Anuncio> calculateScoreList() throws IOException {
-
-        return calculateScore(readAdJsonFile());
-	}
 	
-	@Cacheable(value = "adCache")
-	public List<Anuncio> readAdJsonFile() throws IOException {
-		
-		File photosFile = ResourceUtils.getFile("classpath:anuncios.json");
-		return mapper.readValue(new String(Files.readAllBytes(photosFile.toPath())), new TypeReference<List<Anuncio>>(){});
-	}
+	@Autowired
+	private AnunciosProperties anunciosProperties;
 	
-	@Cacheable(value = "photoCache")
-	public List<Foto> readPhotosJsonFile() throws IOException {
-		
-		File photosFile = ResourceUtils.getFile("classpath:fotos.json");
-		photosList = mapper.readValue(new String(Files.readAllBytes(photosFile.toPath())), new TypeReference<List<Foto>>(){});
-		return mapper.readValue(new String(Files.readAllBytes(photosFile.toPath())), new TypeReference<List<Foto>>(){});
-	}
+	@Resource(name = "readPhotosJsonFile")
+	List<Foto> readPhotosJsonFile;
 	
-	private List<Anuncio> calculateScore(List<Anuncio> adsList) {
-		
+	public List<Anuncio> calculateScore(List<Anuncio> adsList) {
 		adsList.forEach(item -> {
 			if(item.getTypology().equals(anunciosProperties.getTypology().getChalet())) {
 				item.setScore(validateChalet(item));
@@ -68,15 +49,15 @@ public class ReaderFile {
 
 		Integer score = calculateWordScoreInDescription(ad);
 		score += calculatePhotosScore(ad);
-		
+
 		if(AdValidation.descriptionIsNotEmpty().apply(ad)) {
 			score += anunciosProperties.getDescrip();
 		}
-		
+
 		if(AdValidation.descriptionMoreThan(anunciosProperties.getChaletWords()).apply(ad)) {
 			score += anunciosProperties.getDescripcion().getPisoMas50();
 		}
-		
+
 		if(AdValidation.chaletIsComplete().apply(ad)) {
 			score += anunciosProperties.getAnuncioCompleto();
 		}
@@ -107,28 +88,34 @@ public class ReaderFile {
 	}
 	
 	private Integer validateGarage(Anuncio ad) {
-		
-		Integer garageScore = 0; 
+
+		Integer garageScore = calculateWordScoreInDescription(ad);
 		garageScore += calculatePhotosScore(ad);
 		
-		if(AdValidation.photoIsNotEmpty().apply(ad)) {
+		if(AdValidation.descriptionIsNotEmpty().apply(ad)) {
+			garageScore += anunciosProperties.getDescrip();
+		}
+
+		if(AdValidation.garageIsComplete().apply(ad)) {
 			garageScore += anunciosProperties.getAnuncioCompleto();
 		}
 		
+		System.out.println("garage total " + ad.getId() + " " + garageScore);
 		return garageScore;
 	}
 	
 	private Integer calculatePhotosScore(Anuncio ad) {
 		
 		Long photosScore = 0L;
-		photosScore += photosList.parallelStream()
+		photosScore += readPhotosJsonFile.parallelStream()
 				.filter(item -> ad.getPictures().contains(item.getId()))
 				.filter(item2 -> item2.getQuality().equals(HD))
 				.count() * anunciosProperties.getFotoHd();
-		
-		photosScore += photosList.parallelStream()
+
+		photosScore += readPhotosJsonFile
+				.parallelStream()
 				.filter(item -> ad.getPictures().contains(item.getId()))
-				.filter(item2 -> !item2.getQuality().equals(HD))
+				.filter(item2 -> item2.getQuality().equals(SD))
 				.count() * anunciosProperties.getFotoNormal();
 	
 		if(photosScore.intValue() <=0) {
@@ -139,21 +126,13 @@ public class ReaderFile {
 	}
 	
 	private Integer calculateWordScoreInDescription(Anuncio ad) {
-		
-		anunciosProperties.getDescripcion().getWords().spliterator().forEachRemaining(item -> 
-			wordScore += StringUtils
-					.countOccurrencesOf(ad.getDescription(), item) * anunciosProperties.getDescripcion().getPalabras()
+		wordScore = 0;
+		anunciosProperties.getDescripcion().getWords().spliterator()
+			.forEachRemaining(item -> 
+				wordScore += StringUtils
+					.countOccurrencesOf(ad.getDescription().toLowerCase(), item.toLowerCase()) * anunciosProperties.getDescripcion().getPalabras()
 		);
 
 		return wordScore;
 	}
-	
-	public static AnunciosProperties getAnunciosProperties() {
-		return anunciosProperties;
-	}
-
-	public static void setAnunciosProperties(AnunciosProperties anunciosProperties) {
-		ReaderFile.anunciosProperties = anunciosProperties;
-	}
-
 }
