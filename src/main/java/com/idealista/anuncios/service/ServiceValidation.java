@@ -99,8 +99,7 @@ public class ServiceValidation {
 		if(AdValidation.garageIsComplete().apply(ad)) {
 			garageScore += anunciosProperties.getAnuncioCompleto();
 		}
-		
-		System.out.println("garage total " + ad.getId() + " " + garageScore);
+
 		return garageScore;
 	}
 	

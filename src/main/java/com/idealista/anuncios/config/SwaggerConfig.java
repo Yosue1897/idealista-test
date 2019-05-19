@@ -34,7 +34,7 @@ public class SwaggerConfig {
 
 	private Predicate<String> paths() {
         return Predicates.and(
-        PathSelectors.regex("/anuncios.*"),
+        PathSelectors.regex("/api/anuncios.*"),
         Predicates.not(PathSelectors.regex("/error.*")));
         }
 }
