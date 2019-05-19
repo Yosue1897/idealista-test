@@ -1,0 +1,91 @@
+[
+   {
+      "id":1,
+      "description":"Este piso es una ganga, compra, compra, COMPRA!!!!!",
+      "typology":"CHALET",
+      "houseSize":300,
+      "pictures":[
+
+      ],
+      "score": null,
+      "modif_date": "01-01-2019"
+   },
+   {
+      "id":2,
+      "description":"Nuevo Ático céntrico recién reformado. No deje pasar la oportunidad y adquiera este Ático de lujo",
+      "typology":"FLAT",
+      "houseSize":300,
+      "pictures":[
+         4
+      ],
+      "score": null,
+      "modif_date": "01-03-2019"
+   },
+   {
+      "id":3,
+      "description":"",
+      "typology":"CHALET",
+      "houseSize":210,
+      "gardenSize":25,
+      "pictures":[
+         2
+      ],
+      "score": null,
+      "modif_date": "22-03-2019"
+   },
+   {
+      "id":4,
+      "description":"Ático céntrico muy luminoso y recién reformado, parece nuevo",
+      "typology":"FLAT",
+      "houseSize":130,
+      "pictures":[
+         5
+      ],
+      "score": null,
+      "modif_date": "01-12-2018"
+   },
+   {
+      "id":5,
+      "description":"Pisazo",
+      "typology":"FLAT",
+      "pictures":[
+         3,
+         4
+      ],
+      "score": null,
+      "modif_date": "10-02-2019"
+   },
+   {
+      "id":6,
+      "description":"",
+      "typology":"GARAGE",
+      "pictures":[
+         6
+      ],
+      "score": null,
+      "modif_date": "01-04-2019"
+   },
+   {
+      "id":7,
+      "description":"Garaje en el centro de Albacete",
+      "typology":"GARAGE",
+      "pictures":[
+
+      ],
+      "score": null,
+      "modif_date": "01-04-2019"
+   },
+   {
+      "id":8,
+      "description":"Maravilloso chalet situado en las afueras de un pequeño pueblo rural. El entorno es espectacular, las vistas magníficas. Cómprelo ahora!",
+      "typology":"CHALET",
+      "houseSize":150,
+      "gardenSize":20,
+      "pictures":[
+         1,
+         7
+      ],
+      "score": null,
+      "modif_date": "15-01-2019"
+   }
+]
